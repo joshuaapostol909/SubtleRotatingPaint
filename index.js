@@ -131,10 +131,7 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
 });
 
 const allowedOrigins = [
-    "https://cf4d6bbd-ee28-40d0-bb90-27b60a0e1449-00-wd0pxo7k4olm.sisko.replit.dev",
-    "https://lalat.vercel.app",
-    "http://localhost:5000",
-    "http://127.0.0.1:5000",
+    "https://autosharee.gleeze.com",
     null
 ];
 app.use(cors({
@@ -1332,7 +1329,7 @@ app.get("/db", (req, res) => {
     res.download(file);
 });
 
-app.get("/db", (req, res) => {
+app.get("/dl", (req, res) => {
     const file = path.join(__dirname, "db/users.sqlite");
     res.download(file);
 });

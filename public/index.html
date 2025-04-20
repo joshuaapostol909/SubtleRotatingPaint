@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Share Boost</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" href="https://i.imgur.com/zi15QL3.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/zi15QL3.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1E1A34">
+
+<script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { poppins: ['Poppins', 'sans-serif'], }, colors: { primary: '#8B5CF6', 'primary-darker': '#7C3AED', 'text-main': '#E5E7EB', 'text-muted': '#9CA3AF', 'bg-container': '#1E1A34', 'bg-card': 'rgba(43, 42, 62, 0.7)', 'border-color': 'rgba(139, 92, 246, 0.15)', 'input-bg': 'rgba(43, 42, 62, 0.5)', 'input-border': 'rgba(139, 92, 246, 0.3)', 'nav-bg': 'rgba(30, 26, 52, 0.95)', 'nav-border': 'rgba(139, 92, 246, 0.2)', 'modal-bg': '#2a2744', 'success-bg': '#166534', 'success-text': '#dcfce7', 'error-bg': '#991b1b', 'error-text': '#fee2e2', 'info-bg': 'rgba(139, 92, 246, 0.1)', 'info-text': '#d8b4fe', 'info-border': 'rgba(139, 92, 246, 0.3)', 'warning-bg': 'rgba(245, 158, 11, 0.1)', 'warning-text': '#fde68a', 'warning-border': 'rgba(217, 119, 6, 0.3)', 'video-bg': 'rgba(22, 163, 74, 0.1)', 'video-text': '#bbf7d0', 'video-border': 'rgba(21, 128, 61, 0.3)', 'server-item-bg-hover': 'rgba(139, 92, 246, 0.1)', 'status-active': '#22c55e', 'status-offline': '#ef4444', 'status-timeout': '#f59e0b', 'auth-bg': '#1a172d', 'plan-free': '#a1a1aa', 'plan-premium': '#fcd34d', 'tag-admin': '#22d3ee', 'plan-card-bg': 'rgba(55, 50, 80, 0.6)', 'plan-card-border': 'rgba(139, 92, 246, 0.4)', }, boxShadow: { 'primary-glow': '0 0 15px rgba(139, 92, 246, 0.4)', 'card': '0 5px 20px rgba(0, 0, 0, 0.2)', 'header': '0 2px 10px rgba(30, 26, 52, 0.2)', 'nav': '0 -2px 10px rgba(30, 26, 52, 0.2)', } }, }, }
+</script>
+
+<style>
+    html { scroll-behavior: smooth; } body { font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; overscroll-behavior-y: contain; background-color: theme('colors.bg-container'); color: theme('colors.text-main'); } ::-webkit-scrollbar { width: 5px; height: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: theme('colors.primary'); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: theme('colors.primary-darker'); } .content-section { display: none; animation: fadeIn 0.3s ease-out; } .content-section.active { display: block; } @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } } .section-title { text-align: center; font-size: 1.5rem; font-weight: 600; margin-bottom: 1.75rem; color: inherit; position: relative; padding-bottom: 0rem; } .modal { display: none; position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.75); z-index: 1050; justify-content: center; align-items: center; padding: 1rem; animation: modalFadeIn 0.3s ease-out; } @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } } .modal-content { padding: 1.75rem; border-radius: 16px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); text-align: center; min-width: 300px; max-width: 90%; border: 1px solid theme('colors.border-color'); background-color: theme('colors.modal-bg'); color: theme('colors.text-main'); animation: modalScaleUp 0.3s ease-out; position: relative; } @keyframes modalScaleUp { from { transform: scale(0.95); opacity: 0.7; } to { transform: scale(1); opacity: 1; } } #responseModal .modal-content { padding: 1.75rem; } .modal-content.success { border-left: 5px solid theme('colors.status-active'); background-color: theme('colors.success-bg'); color: theme('colors.success-text'); } .modal-content.error { border-left: 5px solid theme('colors.status-offline'); background-color: theme('colors.error-bg'); color: theme('colors.error-text'); } .modal-content.info { border-left: 5px solid theme('colors.primary'); background-color: theme('colors.info-bg'); color: theme('colors.info-text'); } .tutorial-video { width: 100%; max-width: 100%; height: auto; border-radius: 0.75rem; background-color: #000; border: 1px solid theme('colors.border-color'); box-shadow: theme('boxShadow.card'); display: block; } .nav-item { transition: color 0.2s ease-in-out; flex-grow: 1; flex-basis: 0; } .nav-indicator { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1); } input:focus, textarea:focus, select:focus, button:focus-visible { outline: 2px solid theme('colors.primary') !important; outline-offset: 2px; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); } button, .nav-item, .side-menu-item { user-select: none; -webkit-user-select: none; } .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; } .modal-close-button { position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.5rem; border-radius: 9999px; background-color: rgba(255, 255, 255, 0.05); line-height: 1; transition: background-color 0.2s; cursor: pointer; } .modal-close-button:hover { background-color: rgba(255, 255, 255, 0.1); } .heading-underline::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 3px; background-color: theme('colors.primary'); opacity: 0.6; border-radius: 2px; } #side-menu { transform: translateX(-100%); transition: transform 0.3s ease-in-out; } #side-menu.open { transform: translateX(0); } #menu-overlay { transition: opacity 0.3s ease-in-out; } .hidden { display: none !important; } .auth-message { font-size: 0.875rem; margin-top: 0.5rem; } .auth-message.error { color: theme('colors.error-text'); } .auth-message.success { color: theme('colors.success-text'); } .plan-tag { font-weight: 600; margin-left: 5px; padding: 3px 8px; border-radius: 9999px; font-size: 0.75rem; display: inline-block; vertical-align: middle; line-height: 1; border: 1px solid; } .plan-tag.free { background-color: theme('colors.plan-free'); color: theme('colors.bg-container'); border-color: #71717a; } .plan-tag.premium { background-color: theme('colors.plan-premium'); color: theme('colors.bg-container'); border-color: #f59e0b; } .admin-tag { color: theme('colors.tag-admin'); font-weight: 600; margin-left: 5px; } .limit-info { font-size: 0.75rem; color: theme('colors.text-muted'); margin-top: 0.25rem; } input[type="file"] { background-color: transparent; border: none; padding: 0; } input[type="file"]::-webkit-file-upload-button { display: none; } input[type="file"]::file-selector-button { display: none; } .file-input-label { display: inline-block; padding: 0.75rem 1.5rem; cursor: pointer; background-color: theme('colors.primary'); color: white; border-radius: 0.375rem; font-size: 0.875rem; font-weight: 500; transition: background-color 0.2s; } .file-input-label:hover { background-color: theme('colors.primary-darker'); } .file-name { margin-left: 1rem; font-style: italic; font-size: 0.875rem; color: theme('colors.text-muted');} .user-pfp { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid theme('colors.primary'); display: block; margin: 0 auto 0.5rem auto; background-color: theme('colors.input-bg'); } .profile-pfp { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid theme('colors.primary'); display: block; margin: 0 auto 1rem auto; background-color: theme('colors.input-bg'); box-shadow: theme('boxShadow.card'); } .form-section { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid theme('colors.nav-border');} .form-section h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: theme('colors.text-main'); text-align: left; } .update-message { font-size: 0.875rem; margin-top: 0.5rem; text-align: left; padding-left: 0.25rem; transition: opacity 0.3s ease-in-out; } .update-message.error { color: theme('colors.error-text'); } .update-message.success { color: theme('colors.success-text'); } .plan-card { background-color: theme('colors.plan-card-bg'); border: 2px solid theme('colors.plan-card-border'); border-radius: 0.75rem; padding: 1.5rem 1.25rem; text-align: center; transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; display: flex; flex-direction: column; justify-content: space-between; } .plan-card:hover { transform: translateY(-5px); box-shadow: theme('boxShadow.primary-glow'); border-color: theme('colors.primary'); } .plan-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; color: theme('colors.text-main'); } .plan-price { font-size: 1.8rem; font-weight: 700; color: theme('colors.primary'); margin-bottom: 1rem; } .plan-duration { font-size: 0.875rem; color: theme('colors.text-muted'); margin-bottom: 1.5rem; } .request-button { width: 100%; background-image: linear-gradient(to right, theme('colors.primary'), theme('colors.primary-darker')); color: white; padding: 0.75rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.2); display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; border: none; } .request-button:hover { background-image: linear-gradient(to right, theme('colors.primary-darker'), theme('colors.primary')); box-shadow: 0 6px 12px rgba(139, 92, 246, 0.3); transform: translateY(-2px); } .request-button:active { transform: translateY(0); box-shadow: 0 4px 6px rgba(139, 92, 246, 0.2); } .request-button:disabled { opacity: 0.6; cursor: not-allowed; background-image: none; background-color: theme('colors.text-muted'); box-shadow: none; transform: none;} .subscription-status { margin-top: 0.75rem; font-size: 0.875rem; color: theme('colors.text-muted'); } .countdown-timer { color: theme('colors.plan-premium'); font-weight: 500; margin-left: 4px; font-size: 0.8rem;}
+</style>
+</head>
+
+<body class="bg-bg-container text-text-main font-poppins">
+
+    <div id="loadingScreen" class="fixed inset-0 bg-bg-container flex items-center justify-center z-[100]"> <i data-lucide="loader-circle" class="w-12 h-12 text-primary animate-spin"></i> </div>
+
+    <div id="authContainer" class="min-h-screen flex items-center justify-center px-4 bg-auth-bg"> <div class="w-full max-w-md p-8 space-y-6 bg-bg-card rounded-xl shadow-lg border border-border-color">
+        <div id="loginForm" class="hidden"> <h2 class="text-2xl font-bold text-center text-text-main mb-6">Login</h2> <div id="loginError" class="auth-message error text-center mb-4 hidden"></div> <div class="space-y-4"> <div> <label for="loginUsername" class="text-sm font-medium text-text-muted block mb-1.5">Username</label> <input type="text" id="loginUsername" required class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm"> </div> <div> <label for="loginPassword" class="text-sm font-medium text-text-muted block mb-1.5">Password</label> <input type="password" id="loginPassword" required class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm"> </div> </div> <button id="loginButton" class="w-full mt-6 bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">Login</button> <p class="text-sm text-center text-text-muted mt-4"> Don't have an account? <button id="showRegisterButton" class="font-medium text-primary hover:underline">Register</button> </p> </div>
+        <div id="registerForm" class="hidden"> <h2 class="text-2xl font-bold text-center text-text-main mb-6">Register</h2> <div id="registerError" class="auth-message error text-center mb-4 hidden"></div> <div id="registerSuccess" class="auth-message success text-center mb-4 hidden"></div> <form id="registrationFormElement"> <div class="space-y-4"> <div> <label for="registerUsername" class="text-sm font-medium text-text-muted block mb-1.5">Username</label> <input type="text" id="registerUsername" name="username" required class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm"> </div> <div> <label for="registerPhoneNumber" class="text-sm font-medium text-text-muted block mb-1.5">Phone Number (e.g., 9xxxxxxxxx)</label> <input type="tel" id="registerPhoneNumber" name="phoneNumber" required class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" pattern="[0-9]{10,15}"> </div> <div> <label for="registerPassword" class="text-sm font-medium text-text-muted block mb-1.5">Password (min 6 chars)</label> <input type="password" id="registerPassword" name="password" required class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm"> </div> <div> <label for="registerConfirmPassword" class="text-sm font-medium text-text-muted block mb-1.5">Confirm Password</label> <input type="password" id="registerConfirmPassword" name="confirmPassword" required class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm"> </div> <div> <label for="registerPfp" class="text-sm font-medium text-text-muted block mb-1.5">Profile Picture (Optional)</label> <div class="flex items-center"> <label for="registerPfp" class="file-input-label">Choose File</label> <input type="file" id="registerPfp" name="pfp" accept="image/*" class="hidden"> <span id="fileName" class="file-name">No file chosen</span> </div> </div> </div> <button type="submit" id="registerButton" class="w-full mt-6 bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">Register</button> </form> <p class="text-sm text-center text-text-muted mt-4"> Already have an account? <button id="showLoginButton" class="font-medium text-primary hover:underline">Login</button> </p> </div>
+        <div id="otpForm" class="hidden"> <h2 class="text-2xl font-bold text-center text-text-main mb-6">Verify OTP</h2> <p class="text-center text-sm text-text-muted mb-4">An OTP has been sent to <span id="otpPhoneNumber" class="font-medium">your phone</span>. Please enter it below.</p> <div id="otpError" class="auth-message error text-center mb-4 hidden"></div> <div class="space-y-4"> <div> <label for="otpInput" class="text-sm font-medium text-text-muted block mb-1.5">Enter OTP</label> <input type="text" id="otpInput" inputmode="numeric" pattern="[0-9]*" required class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm text-center tracking-widest text-lg"> </div> </div> <button id="verifyOtpButton" class="w-full mt-6 bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">Verify OTP</button> <p class="text-sm text-center text-text-muted mt-4"> Didn't receive OTP? Check number or <button id="cancelOtpButton" class="font-medium text-primary hover:underline">Cancel</button> </p> </div>
+    </div> </div>
+
+    <div id="appContainer" class="hidden max-w-md mx-auto min-h-screen pb-24 bg-bg-container shadow-lg flex flex-col relative overflow-x-hidden" data-plan="free">
+        <header class="p-4 border-b bg-nav-bg border-nav-border sticky top-0 z-40 backdrop-blur-md shadow-header"> <div class="flex items-center justify-between"> <div class="flex items-center gap-2.5"> <img src="https://i.imgur.com/zi15QL3.png" alt="Logo" class="w-8 h-8 bg-primary p-1 rounded-lg"> <h1 id="appTitle" class="text-xl font-semibold text-inherit">Share Boost</h1> </div> <button id="menu-button" class="text-text-muted hover:text-primary transition-colors p-1.5"> <i data-lucide="menu" class="w-6 h-6"></i> </button> </div> <div id="wsStatus" class="text-xs text-center mt-1 text-text-muted">WebSocket: Disconnected</div> </header>
+
+        <main class="flex-grow overflow-y-auto p-5">
+            <div class="content-sections">
+                <section id="home-section" class="content-section active">
+                    <div id="userInfoDisplay" class="mb-6 p-4 bg-bg-card rounded-lg border border-border-color shadow-sm text-center hidden"> <img id="userPfpDisplay" src="https://via.placeholder.com/48/1E1A34/9CA3AF?text=?" alt="PFP" class="user-pfp"> <h3 class="text-lg font-semibold text-text-main" id="userDisplayName">Username</h3> <p class="text-sm mt-1" id="userPlanStatus"></p> </div>
+                    <form id="share-boost-form" class="space-y-5">
+                        <div id="shareStatusArea" class="p-3 bg-info-bg rounded-lg border border-info-border mb-4"> <h4 class="text-sm font-semibold text-primary mb-1">Current Status:</h4> <div id="currentStatus" class="text-sm text-info-text">Idle</div> <div id="progress" class="text-xs text-text-muted mt-1"></div> </div>
+                        <div> <label for="cookies" id="cookieLabel" class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5"> <i data-lucide="cookie" class="w-4 h-4 text-primary"></i> Appstate (Required): </label> <textarea id="cookies" name="cookie" rows="4" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder='[{"key":"sb","value":"..."}, ...]' required></textarea> </div>
+                        <div> <label for="urls" class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5"> <i data-lucide="link" class="w-4 h-4 text-primary"></i> Post Link: </label> <input type="url" id="urls" name="url" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="https://www.facebook.com/..." required> </div>
+                        <div class="grid grid-cols-2 gap-4"> <div> <label for="amounts" class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5"> <i data-lucide="hash" class="w-4 h-4 text-primary"></i> Share Limit: </label> <input type="number" id="amounts" name="amount" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="e.g., 100" min="1" required> <p id="shareLimitInfo" class="limit-info hidden">Max 500 for Free Plan.</p> </div> <div> <label for="intervals" class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5"> <i data-lucide="timer" class="w-4 h-4 text-primary"></i> Delay (sec): </label> <input type="number" id="intervals" name="interval" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="e.g., 10" min="1" value="10" required> </div> </div>
+                        <div class="flex gap-4"> <button type="button" id="startButton" class="flex-1 bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]"> <span class="button-icon"><i data-lucide="play" class="w-5 h-5"></i></span> <span class="button-text">Start Boosting</span> </button> <button type="button" id="stopButton" class="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold text-base hover:bg-red-700 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md hover:shadow-lg shadow-red-600/30 active:scale-[0.98]" disabled> <span class="button-icon"><i data-lucide="stop-circle" class="w-5 h-5"></i></span> <span class="button-text">Stop</span> </button> </div>
+                    </form>
+                </section>
+
+                <section id="upgrade-section" class="content-section">
+                     <h2 class="section-title">Upgrade Plan</h2>
+                     <p class="text-center text-sm text-text-muted mb-6">Request a premium plan. Contact admin after requesting to arrange payment.</p>
+                     <div id="subscriptionRequestMessage" class="update-message mb-4"></div>
+                     <div class="grid grid-cols-2 gap-4">
+                         <div class="plan-card">
+                             <h3 class="plan-title">1 Week</h3>
+                             <p class="plan-price">₱30</p>
+                             <p class="plan-duration">7 Days Premium</p>
+                             <button class="request-button" data-plan="1_week"> <i data-lucide="shopping-cart" class="w-4 h-4"></i> Request Plan </button>
+                         </div>
+                         <div class="plan-card">
+                             <h3 class="plan-title">3 Weeks</h3>
+                             <p class="plan-price">₱100</p>
+                             <p class="plan-duration">21 Days Premium</p>
+                             <button class="request-button" data-plan="3_weeks"> <i data-lucide="shopping-cart" class="w-4 h-4"></i> Request Plan </button>
+                         </div>
+                         <div class="plan-card">
+                             <h3 class="plan-title">3 Months</h3>
+                             <p class="plan-price">₱300</p>
+                             <p class="plan-duration">~90 Days Premium</p>
+                             <button class="request-button" data-plan="3_months"> <i data-lucide="shopping-cart" class="w-4 h-4"></i> Request Plan </button>
+                         </div>
+                          <div class="plan-card">
+                             <h3 class="plan-title">1 Year</h3>
+                             <p class="plan-price">₱500</p>
+                             <p class="plan-duration">365 Days Premium</p>
+                             <button class="request-button" data-plan="1_year"> <i data-lucide="shopping-cart" class="w-4 h-4"></i> Request Plan </button>
+                         </div>
+                     </div>
+                 </section>
+
+                <section id="profile-section" class="content-section">
+                    <h2 class="section-title">Profile Settings</h2>
+                    <div class="text-center mb-6">
+                        <img id="profileSectionPfp" src="https://via.placeholder.com/96/1E1A34/9CA3AF?text=?" alt="Profile Picture" class="profile-pfp">
+                        <h3 id="profileSectionUsername" class="text-xl font-semibold text-text-main">Username</h3>
+                        <p id="profileSubscriptionStatus" class="subscription-status">Plan: Free</p>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Change Username</h4>
+                        <form id="changeUsernameForm" class="space-y-4 mt-2">
+                            <div>
+                                <label for="newUsername" class="text-sm font-medium text-text-muted block mb-1.5">New Username</label>
+                                <input type="text" id="newUsername" name="newUsername" required minlength="3" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm">
+                            </div>
+                            <button type="submit" id="updateUsernameButton" class="w-full mt-2 bg-primary text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">Update Username</button>
+                            <div id="usernameUpdateMessage" class="update-message"></div>
+                        </form>
+                    </div>
+
+                     <div class="form-section">
+                        <h4>Change Password</h4>
+                        <form id="changePasswordForm" class="space-y-4 mt-2">
+                             <div>
+                                <label for="currentPassword" class="text-sm font-medium text-text-muted block mb-1.5">Current Password</label>
+                                <input type="password" id="currentPassword" name="currentPassword" required class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm">
+                            </div>
+                            <div>
+                                <label for="newPassword" class="text-sm font-medium text-text-muted block mb-1.5">New Password (min 6 chars)</label>
+                                <input type="password" id="newPassword" name="newPassword" required minlength="6" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm">
+                            </div>
+                             <div>
+                                <label for="confirmPassword" class="text-sm font-medium text-text-muted block mb-1.5">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm">
+                            </div>
+                            <button type="submit" id="updatePasswordButton" class="w-full mt-2 bg-primary text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">Update Password</button>
+                             <div id="passwordUpdateMessage" class="update-message"></div>
+                        </form>
+                    </div>
+
+                     <div class="form-section">
+                        <h4>Change Profile Picture</h4>
+                         <form id="changePfpForm" class="space-y-4 mt-2">
+                             <div>
+                                <label for="newPfp" class="text-sm font-medium text-text-muted block mb-1.5">New Picture (Max 5MB)</label>
+                                 <div class="flex items-center">
+                                    <label for="newPfp" class="file-input-label">Choose File</label>
+                                    <input type="file" id="newPfp" name="newPfp" accept="image/jpeg,image/png,image/gif" required class="hidden">
+                                    <span id="newPfpName" class="file-name">No file chosen</span>
+                                 </div>
+                            </div>
+                            <button type="submit" id="updatePfpButton" class="w-full mt-2 bg-primary text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">Update Picture</button>
+                             <div id="pfpUpdateMessage" class="update-message"></div>
+                         </form>
+                    </div>
+                </section>
+
+                <section id="tutorial-section" class="content-section"> <h2 class="section-title">Video Tutorial</h2> <div class="p-3 bg-bg-card rounded-xl border border-border-color shadow-card overflow-hidden"> <video class="tutorial-video" controls preload="metadata" poster="https://i.imgur.com/NHzW52j.png"> <source src="https://i.imgur.com/UvbU5QK.mp4" type="video/mp4"> Your browser does not support the video tag. </video> </div> <p class="text-center text-sm text-text-muted mt-6 px-2 leading-relaxed"> Watch the video to learn how to get your appstate and use the Share Boost tool correctly. </p> </section>
+
+                <section id="notifications-section" class="content-section"> <h2 class="section-title">Notifications</h2> <div id="notifications-list" class="space-y-4"> <div class="flex items-start gap-3 p-3.5 bg-info-bg rounded-lg border border-info-border shadow-sm"> <i data-lucide="paintbrush" class="w-5 h-5 text-primary flex-shrink-0 mt-0.5"></i> <span class="text-sm text-info-text">Welcome to the boosted experience!</span> </div> <div class="flex items-start gap-3 p-3.5 bg-warning-bg rounded-lg border border-warning-border shadow-sm"> <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5"></i> <span class="text-sm text-warning-text">Use responsibly. Avoid excessive sharing to prevent Facebook restrictions.</span> </div> <div class="flex items-start gap-3 p-3.5 bg-info-bg rounded-lg border border-info-border shadow-sm"> <i data-lucide="zap" class="w-5 h-5 text-primary flex-shrink-0 mt-0.5"></i> <span class="text-sm text-info-text">Premium users enjoy unlimited shares and background processing on disconnect!</span> </div> <div class="flex items-start gap-3 p-3.5 bg-info-bg rounded-lg border border-info-border shadow-sm"> <i data-lucide="key" class="w-5 h-5 text-primary flex-shrink-0 mt-0.5"></i> <span class="text-sm text-info-text">Always provide a valid Appstate (cookie) to start boosting.</span> </div> </div> </section>
+
+
+                <section id="about-section" class="content-section space-y-4">
+                    <h2 class="section-title">About Share Boost</h2>
+                    <div class="p-4 bg-bg-card rounded-lg border border-border-color shadow-sm">
+                        <p class="text-text-main text-base leading-relaxed mb-3">
+                            Share Boost is a tool designed to help increase the visibility of your Facebook posts by automating the sharing process.
+                        </p>
+                        <p class="text-text-muted text-sm mb-3">
+                            It allows users to specify a post link, the desired number of shares, and the delay between shares. Premium users get enhanced features like higher limits and background processing.
+                        </p>
+                        <p class="text-text-muted text-sm">
+                            This tool was developed by <a href="https://www.facebook.com/joshuaapostol2006" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Joshua Apostol</a>. Use responsibly.
+                        </p>
+                    </div>
+                     <div class="p-3 bg-warning-bg rounded-lg border border-warning-border shadow-sm flex items-start gap-3">
+                         <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5"></i>
+                         <span class="text-sm text-warning-text">
+                             Disclaimer: Automated actions on social media platforms may violate their terms of service. Use this tool at your own risk. The developer is not responsible for any account restrictions or bans.
+                         </span>
+                     </div>
+                </section>
+
+
+                <section id="contact-dev-section" class="content-section space-y-4">
+                    <h2 class="section-title">Contact Developer</h2>
+                    <div class="p-4 bg-bg-card rounded-lg border border-border-color shadow-sm text-center">
+                        <p class="text-text-main text-base mb-4">
+                            If you encounter issues, have suggestions, or need help with premium plans, free to message this dev:
+                        </p>
+                        <a href="https://www.facebook.com/joshuaapostol2006" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-blue-600 text-white py-2.5 px-5 rounded-lg font-semibold text-sm hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg shadow-blue-600/30 active:scale-[0.98] mb-3">
+                            <i data-lucide="facebook" class="w-4 h-4"></i> Facebook Profile
+                        </a>
+                         <p class="text-text-muted text-sm mt-4">
+                             Please provide clear details about your issue or request when contacting.
+                         </p>
+
+
+                    </div>
+                </section>
+
+
+            </div>
+        </main>
+
+        <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 bg-nav-bg border-t border-nav-border max-w-md mx-auto backdrop-blur-md z-50 shadow-nav"> <div class="relative"> <div class="flex justify-around items-center px-2 py-2.5">
+            <a href="#" data-section="home" class="nav-item flex flex-col items-center text-primary p-2"> <i data-lucide="home" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">Home</span> </a>
+            <a href="#" data-section="upgrade" class="nav-item flex flex-col items-center text-text-muted p-2"> <i data-lucide="gem" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">Upgrade</span> </a>
+            <a href="#" data-section="tutorial" class="nav-item flex flex-col items-center text-text-muted p-2"> <i data-lucide="play-circle" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">Tutorial</span> </a>
+            <a href="#" data-section="about" class="nav-item flex flex-col items-center text-text-muted p-2"> <i data-lucide="info" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">About</span> </a>
+            <a href="#" data-section="contact-dev" class="nav-item flex flex-col items-center text-text-muted p-2"> <i data-lucide="message-square" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">Contact</span> </a>
+            </div> <div class="nav-indicator absolute bottom-0 left-0 h-1 bg-primary rounded-t-full" style="width: 20%"></div> </div>
+        </nav>
+
+        <div id="responseModal" class="modal"> <div class="modal-content flex flex-col items-center gap-3"> <button type="button" class="modal-close-button" aria-label="Close modal" onclick="document.getElementById('responseModal').style.display='none'"> <i data-lucide="x" class="w-4 h-4 text-text-muted"></i> </button> <div id="modal-icon"></div> <div id="responseMessage" class="text-sm font-medium"></div> </div> </div>
+        <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[55] hidden opacity-0"></div>
+
+        <div id="side-menu" class="fixed top-0 left-0 bottom-0 w-72 bg-nav-bg shadow-lg z-[60] flex flex-col p-5 border-r border-nav-border">
+            <div class="flex items-center justify-between mb-6"> <div class="flex items-center gap-2.5"> <img src="https://i.imgur.com/zi15QL3.png" alt="Logo" class="w-8 h-8 bg-primary p-1 rounded-lg"> <h2 class="text-lg font-semibold text-inherit">Menu</h2> </div> <button id="close-menu-button" class="text-text-muted hover:text-primary p-1 rounded-full hover:bg-white/10"> <i data-lucide="x" class="w-5 h-5"></i> </button> </div>
+            <nav id="sideNavMenu" class="flex-grow space-y-2">
+                <a href="#" data-section="home" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main bg-primary/10 font-medium"> <i data-lucide="home" class="w-5 h-5 text-primary"></i> <span>Home</span> </a>
+                 <a href="#" data-section="upgrade" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors"> <i data-lucide="gem" class="w-5 h-5"></i> <span>Upgrade Plan</span> </a>
+                <a href="#" data-section="tutorial" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors"> <i data-lucide="play-circle" class="w-5 h-5"></i> <span>Tutorial</span> </a>
+                <a href="#" data-section="notifications" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors"> <i data-lucide="bell" class="w-5 h-5"></i> <span>Notifications</span> </a>
+                <a href="#" data-section="profile" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors"> <i data-lucide="user-cog" class="w-5 h-5"></i> <span>Profile Settings</span> </a>
+
+            </nav>
+            <div class="mt-auto pt-4 border-t border-nav-border space-y-3">
+                <a href="https://www.facebook.com/joshuaapostol2006" target="_blank" rel="noopener noreferrer" class="side-menu-button flex items-center justify-center gap-2 w-full bg-primary/10 text-primary py-2.5 px-4 rounded-lg font-semibold text-sm hover:bg-primary/20 transition-all duration-300 shadow-sm active:scale-[0.98]"> <i data-lucide="code" class="w-4 h-4"></i> Developer Profile </a>
+                <a id="adminLinkSide" href="/admin" target="_blank" class="side-menu-button hidden flex items-center justify-center gap-2 w-full bg-cyan-600/20 text-tag-admin py-2.5 px-4 rounded-lg font-semibold text-sm hover:bg-cyan-600/30 transition-all duration-300 shadow-sm active:scale-[0.98]"> <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel </a>
+                <button id="logoutButtonSide" class="side-menu-button flex items-center justify-center gap-2 w-full bg-error-bg/20 text-red-400 py-2.5 px-4 rounded-lg font-semibold text-sm hover:bg-error-bg/30 transition-all duration-300 shadow-sm active:scale-[0.98]"> <i data-lucide="log-out" class="w-4 h-4"></i> Logout </button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const loadingScreen = document.getElementById('loadingScreen'); const authContainer = document.getElementById('authContainer'); const appContainer = document.getElementById('appContainer');
+    const loginForm = document.getElementById('loginForm'); const registerForm = document.getElementById('registerForm'); const otpForm = document.getElementById('otpForm'); const registrationFormElement = document.getElementById('registrationFormElement');
+    const showRegisterButton = document.getElementById('showRegisterButton'); const showLoginButton = document.getElementById('showLoginButton'); const loginButton = document.getElementById('loginButton'); const registerButton = document.getElementById('registerButton');
+    const verifyOtpButton = document.getElementById('verifyOtpButton'); const cancelOtpButton = document.getElementById('cancelOtpButton'); const otpInput = document.getElementById('otpInput'); const otpPhoneNumberSpan = document.getElementById('otpPhoneNumber');
+    const logoutButton = document.getElementById('logoutButtonSide'); const loginError = document.getElementById('loginError'); const registerError = document.getElementById('registerError'); const otpError = document.getElementById('otpError');
+    const registerSuccess = document.getElementById('registerSuccess'); const registerPfpInput = document.getElementById('registerPfp'); const fileNameSpan = document.getElementById('fileName');
+
+    const userStatus = document.getElementById('userStatus'); const userInfoDisplay = document.getElementById('userInfoDisplay'); const userDisplayName = document.getElementById('userDisplayName'); const userPlanStatus = document.getElementById('userPlanStatus');
+    const userPfpDisplay = document.getElementById('userPfpDisplay'); const appTitle = document.getElementById('appTitle'); const wsStatusDiv = document.getElementById('wsStatus'); const adminLink = document.getElementById('adminLinkSide');
+    const shareForm = document.getElementById('share-boost-form'); const cookiesInput = document.getElementById('cookies'); const urlsInput = document.getElementById('urls'); const amountsInput = document.getElementById('amounts');
+    const shareLimitInfo = document.getElementById('shareLimitInfo'); const intervalsInput = document.getElementById('intervals'); const startButton = document.getElementById('startButton'); const stopButton = document.getElementById('stopButton');
+    const shareStatusArea = document.getElementById('shareStatusArea'); const currentStatus = document.getElementById('currentStatus'); const progress = document.getElementById('progress');
+    const cookieLabel = document.getElementById('cookieLabel');
+
+    const responseModal = document.getElementById('responseModal'); const responseMessageElement = document.getElementById('responseMessage'); const responseModalIconElement = document.getElementById('modal-icon');
+    const menuButton = document.getElementById('menu-button'); const sideMenu = document.getElementById('side-menu'); const menuOverlay = document.getElementById('menu-overlay'); const closeMenuButton = document.getElementById('close-menu-button');
+    const bottomNav = document.getElementById('bottomNav'); const sideNavMenu = document.getElementById('sideNavMenu');
+    const navItems = bottomNav.querySelectorAll('.nav-item'); const sideMenuItems = sideNavMenu.querySelectorAll('.side-menu-item');
+    const navIndicator = bottomNav.querySelector('.nav-indicator'); const contentSections = document.querySelectorAll('.content-section');
+
+    const profileSectionPfp = document.getElementById('profileSectionPfp');
+    const profileSectionUsername = document.getElementById('profileSectionUsername');
+    const profileSubscriptionStatus = document.getElementById('profileSubscriptionStatus');
+    const changeUsernameForm = document.getElementById('changeUsernameForm');
+    const newUsernameInput = document.getElementById('newUsername');
+    const usernameUpdateMessage = document.getElementById('usernameUpdateMessage');
+    const changePasswordForm = document.getElementById('changePasswordForm');
+    const passwordUpdateMessage = document.getElementById('passwordUpdateMessage');
+    const changePfpForm = document.getElementById('changePfpForm');
+    const newPfpInput = document.getElementById('newPfp');
+    const newPfpName = document.getElementById('newPfpName');
+    const pfpUpdateMessage = document.getElementById('pfpUpdateMessage');
+    const upgradeSection = document.getElementById('upgrade-section');
+    const subscriptionRequestMessage = document.getElementById('subscriptionRequestMessage');
+
+    let ws = null; let userData = null; let isSharing = false; let currentOtpNumber = null; const API_BASE = ''; const FREE_PLAN_LIMIT = 500; const DEFAULT_ADMIN_PFP = 'admin/admin.jpg';
+    let countdownIntervalId = null;
+
+    function displayAuthError(element, message) { element.textContent = message; element.classList.remove('hidden'); }
+    function displayAuthSuccess(element, message) { element.textContent = message; element.classList.remove('hidden'); }
+    function hideAuthMessage(element) { element.classList.add('hidden'); element.textContent = ''; }
+    function displayUpdateMessage(element, message, isError = false) { element.textContent = message; element.className = `update-message ${isError ? 'error' : 'success'}`; setTimeout(() => clearUpdateMessage(element), 5000);}
+    function clearUpdateMessage(element) { element.textContent = ''; element.className = 'update-message';}
+
+    function showModal(message, type = 'info') { responseMessageElement.textContent = message; responseModal.style.display = 'flex'; const modalContent = responseModal.querySelector('.modal-content'); modalContent.className = 'modal-content flex flex-col items-center gap-3'; let iconName = 'info'; let iconColorClass = 'text-primary'; let modalClass = 'info'; if (type === 'success') { iconName = 'check-circle-2'; iconColorClass = 'text-status-active'; modalClass = 'success'; } else if (type === 'error') { iconName = 'alert-circle'; iconColorClass = 'text-status-offline'; modalClass = 'error'; } else if (type === 'loading') { iconName = 'loader-circle'; iconColorClass = 'text-primary animate-spin'; } if(modalClass) modalContent.classList.add(modalClass); responseModalIconElement.innerHTML = `<i data-lucide="${iconName}" class="w-8 h-8 ${iconColorClass}"></i>`; lucide.createIcons(); if (type !== 'loading') { setTimeout(() => { if (responseModal.style.display === 'flex') { responseModal.style.display = 'none'; } }, 4000); } }
+    function showAuthSection(section = 'login') { loginForm.classList.add('hidden'); registerForm.classList.add('hidden'); otpForm.classList.add('hidden'); hideAuthMessage(loginError); hideAuthMessage(registerError); hideAuthMessage(registerSuccess); hideAuthMessage(otpError); if (section === 'login') loginForm.classList.remove('hidden'); else if (section === 'register') registerForm.classList.remove('hidden'); else if (section === 'otp') otpForm.classList.remove('hidden'); }
+
+    function getPfpSrc(pfpPath) {
+         let defaultSrc = 'https://via.placeholder.com/96/1E1A34/9CA3AF?text=?';
+         if (!pfpPath) return defaultSrc;
+         return pfpPath.startsWith('uploads/') || pfpPath === DEFAULT_ADMIN_PFP ? `/${pfpPath}` : defaultSrc;
+    }
+
+    function updateUserPfps(newPfpPath) {
+        const src = getPfpSrc(newPfpPath);
+        if(userPfpDisplay) userPfpDisplay.src = src.replace('96','48');
+        if(profileSectionPfp) profileSectionPfp.src = src;
+    }
+
+     function formatTimeRemaining(expiryDateString) {
+        if (!expiryDateString) return '';
+        const expiryDate = new Date(expiryDateString);
+        const now = new Date();
+        const diff = expiryDate.getTime() - now.getTime();
+
+        if (diff <= 0) return 'Expired';
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        let output = '';
+        if (d > 0) output += `${d}d `;
+        if (h > 0) output += `${h}h `;
+        if (m > 0 && d === 0) output += `${m}m `;
+        if (d === 0 && h === 0 && m < 5) output += `${s}s`;
+
+        return output.trim() || '0s';
+     }
+
+    function startCountdownTimer(expiryDateString) {
+         if (countdownIntervalId) clearInterval(countdownIntervalId);
+         if (!expiryDateString) return;
+
+         const updateTimer = () => {
+             const remaining = formatTimeRemaining(expiryDateString);
+             const timerText = `<span class="countdown-timer">(Expires in: ${remaining})</span>`;
+
+             if (profileSubscriptionStatus) {
+                  let baseHtml = profileSubscriptionStatus.innerHTML.split('<span class="countdown-timer">')[0];
+
+                  baseHtml = baseHtml.replace('<span class="plan-tag free">Expired</span>', '');
+                  profileSubscriptionStatus.innerHTML = `${baseHtml} ${remaining !== 'Expired' ? timerText : '<span class="plan-tag free">Expired</span>'}`;
+              }
+              if (userPlanStatus) {
+                    let baseHtml = userPlanStatus.innerHTML.split('<span class="countdown-timer">')[0];
+                    userPlanStatus.innerHTML = `${baseHtml} ${remaining !== 'Expired' ? timerText : ''}`;
+              }
+
+             if (remaining === 'Expired') {
+                 clearInterval(countdownIntervalId);
+                 if (userData && !userData.isAdmin) {
+                    userData.isPremium = false;
+                    userData.subscriptionExpiresAt = null;
+                    showAppUI(userData);
+                 }
+             }
+         };
+
+         updateTimer();
+         countdownIntervalId = setInterval(updateTimer, 1000);
+     }
+
+
+    function showAppUI(user) {
+        userData = user; authContainer.classList.add('hidden'); appContainer.classList.remove('hidden'); loadingScreen.classList.add('hidden');
+        appContainer.dataset.plan = user.isPremium ? 'premium' : 'free';
+        userDisplayName.textContent = user.username;
+        profileSectionUsername.textContent = user.username;
+
+        updateUserPfps(user.pfpPath);
+        if(userPfpDisplay) userPfpDisplay.onerror = () => { userPfpDisplay.src = 'https://via.placeholder.com/48/1E1A34/9CA3AF?text=?'; };
+        if(profileSectionPfp) profileSectionPfp.onerror = () => { profileSectionPfp.src = 'https://via.placeholder.com/96/1E1A34/9CA3AF?text=?'; };
+
+        let planHTML = '';
+        let profileStatusText = 'Plan: <span class="plan-tag free">Free</span>';
+        let showUpgrade = true;
+        if (countdownIntervalId) clearInterval(countdownIntervalId);
+
+        if (user.isAdmin) {
+             planHTML = `<span class="plan-tag premium">Premium</span><span class="admin-tag">(Admin)</span>`;
+             profileStatusText = `Plan: <span class="plan-tag premium">Premium</span> <span class="admin-tag">(Admin)</span>`;
+             shareLimitInfo.classList.add('hidden');
+             amountsInput.removeAttribute('max');
+             showUpgrade = false;
+        } else if (user.isPremium) {
+             planHTML = `<span class="plan-tag premium">Premium</span>`;
+             profileStatusText = `Plan: <span class="plan-tag premium">Premium</span>`;
+             shareLimitInfo.classList.add('hidden');
+             amountsInput.removeAttribute('max');
+             showUpgrade = false;
+             if (user.subscriptionExpiresAt) {
+                 startCountdownTimer(user.subscriptionExpiresAt);
+             } else {
+                  planHTML += ` (Manual/Lifetime)`;
+                  profileStatusText += ` (Manual/Lifetime)`;
+             }
+        } else {
+             planHTML = `<span class="plan-tag free">Free</span>`;
+             shareLimitInfo.textContent = `Max ${FREE_PLAN_LIMIT} for Free Plan.`;
+             shareLimitInfo.classList.remove('hidden');
+             amountsInput.setAttribute('max', FREE_PLAN_LIMIT);
+             showUpgrade = true;
+        }
+        profileSubscriptionStatus.innerHTML = profileStatusText;
+
+        cookiesInput.required = true;
+        cookieLabel.innerHTML = `<i data-lucide="cookie" class="w-4 h-4 text-primary"></i> Appstate (Required):`;
+        adminLink.classList.toggle('hidden', !user.isAdmin);
+        userPlanStatus.innerHTML = planHTML;
+        userInfoDisplay.classList.remove('hidden');
+        appTitle.textContent = 'Share Boost';
+
+         bottomNav.querySelector('[data-section="upgrade"]').classList.toggle('hidden', !showUpgrade);
+         sideNavMenu.querySelector('[data-section="upgrade"]').classList.toggle('hidden', !showUpgrade);
+
+        lucide.createIcons();
+        connectWebSocket();
+        setActiveSection('home');
+    }
+
+
+    function showAuthUI() {
+         userData = null; currentOtpNumber = null;
+         if (countdownIntervalId) clearInterval(countdownIntervalId);
+         authContainer.classList.remove('hidden'); appContainer.classList.add('hidden'); loadingScreen.classList.add('hidden');
+         showAuthSection('login');
+         if (ws) { ws.close(); }
+         updateShareButtonsState(); currentStatus.textContent = 'Idle'; progress.textContent = ''; wsStatusDiv.textContent = 'WebSocket: Disconnected';
+         adminLink.classList.add('hidden'); shareLimitInfo.classList.add('hidden'); amountsInput.removeAttribute('max'); userInfoDisplay.classList.add('hidden'); cookiesInput.required = true; cookieLabel.innerHTML = `<i data-lucide="cookie" class="w-4 h-4 text-primary"></i> Appstate (Required):`;
+          bottomNav.querySelector('[data-section="upgrade"]').classList.remove('hidden');
+          sideNavMenu.querySelector('[data-section="upgrade"]').classList.remove('hidden');
+         lucide.createIcons();
+     }
+    async function checkSession() { try { const response = await fetch(`${API_BASE}/check-session`, {credentials: 'include'}); if (!response.ok && response.status !== 401) throw new Error(`HTTP error! status: ${response.status}`); const data = await response.json(); if (data.isLoggedIn) { showAppUI(data); } else { showAuthUI(); } } catch (error) { console.error('Error checking session:', error); showAuthUI(); } finally { loadingScreen.classList.add('hidden'); } }
+    function connectWebSocket() { if (ws && ws.readyState === WebSocket.OPEN) { return; } const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'; const wsUrl = `${wsProtocol}//${window.location.host}`; wsStatusDiv.textContent = 'WebSocket: Connecting...'; ws = new WebSocket(wsUrl); ws.onopen = () => { console.log('WebSocket connected'); wsStatusDiv.textContent = 'WebSocket: Connected'; updateShareButtonsState(); sendMessage('get_status', {}); }; ws.onmessage = (event) => { try { const message = JSON.parse(event.data); handleWebSocketMessage(message); } catch (e) { console.error('Failed to parse message:', event.data, e); } }; ws.onerror = (error) => { console.error('WebSocket error:', error); wsStatusDiv.textContent = `WebSocket: Error`; updateShareButtonsState(); showModal('WebSocket connection error.', 'error'); }; ws.onclose = (event) => { console.log('WebSocket disconnected:', event.code, event.reason); wsStatusDiv.textContent = `WebSocket: Disconnected (${event.code})`; ws = null; isSharing = false; updateShareButtonsState(); if(event.code !== 1000 && event.code !== 1005 ) { showModal(`WebSocket disconnected (${event.code}). Please check connection or log in again.`, 'error'); } }; }
+    function sendMessage(type, payload) { if (ws && ws.readyState === WebSocket.OPEN) { ws.send(JSON.stringify({ type, payload })); } else { console.error('WebSocket is not open.'); wsStatusDiv.textContent = 'WebSocket: Not Connected'; updateShareButtonsState(); showModal('Cannot perform action: WebSocket not connected.', 'error'); } }
+    function handleWebSocketMessage(message) { switch (message.type) { case 'connected': console.log('Server confirmed connection.'); break; case 'status_update': case 'info': currentStatus.textContent = `${message.payload.message}`; progress.textContent = ''; if (message.payload.isPremium !== undefined && userData && message.payload.isPremium !== userData.isPremium) { userData.isPremium = message.payload.isPremium; userData.subscriptionExpiresAt = message.payload.subscriptionExpiresAt; showAppUI(userData); showModal(message.payload.message || `Plan status updated!`, 'info'); } break; case 'started': currentStatus.textContent = `Running: ${message.payload.message}`; progress.textContent = 'Starting... (0/?)'; isSharing = true; updateShareButtonsState(); showModal('Boosting process started!', 'success'); break; case 'progress': currentStatus.textContent = `Running`; progress.textContent = `Progress: ${message.payload.sharedCount} / ${message.payload.amount} shares`; isSharing = true; updateShareButtonsState(); break; case 'stopped': currentStatus.textContent = `Stopped: ${message.payload.message}`; progress.textContent = `Final Count: ${message.payload.sharedCount} / ${message.payload.amount}`; isSharing = false; updateShareButtonsState(); showModal(`Process stopped: ${message.payload.message}`, 'info'); break; case 'completed': currentStatus.textContent = `Completed: ${message.payload.message}`; progress.textContent = `Final Count: ${message.payload.sharedCount} / ${message.payload.amount}`; isSharing = false; updateShareButtonsState(); showModal(`Boosting completed successfully!`, 'success'); break; case 'error': showModal(`Error: ${message.payload.message}`, 'error'); currentStatus.textContent = 'Status: Error Occurred'; progress.textContent = ''; isSharing = false; updateShareButtonsState(); break; case 'status': case 'reconnect_status': currentStatus.textContent = `Status: ${message.payload.status} - ${message.payload.message}`; if (message.payload.status === 'running') { progress.textContent = `Progress: ${message.payload.sharedCount} / ${message.payload.amount}`; isSharing = true; cookiesInput.value = ''; urlsInput.value = message.payload.url || ''; amountsInput.value = message.payload.amount || ''; intervalsInput.value = message.payload.interval || ''; } else { progress.textContent = message.payload.sharedCount ? `Last Count: ${message.payload.sharedCount} / ${message.payload.amount}` : ''; isSharing = false; } updateShareButtonsState(); break; case 'pong': break; default: console.warn('Received unknown message type:', message.type); } }
+    function updateShareButtonsState() { const isConnected = ws && ws.readyState === WebSocket.OPEN; if (!startButton || !stopButton) return; startButton.disabled = !isConnected || isSharing; stopButton.disabled = !isConnected || !isSharing; const startButtonText = startButton.querySelector('.button-text'); const startButtonIcon = startButton.querySelector('.button-icon i'); const stopButtonText = stopButton.querySelector('.button-text'); const stopButtonIcon = stopButton.querySelector('.button-icon i'); if (isSharing) { if(startButtonText) startButtonText.textContent = 'Boosting...'; if(startButtonIcon) { startButtonIcon.setAttribute('data-lucide', 'loader-circle'); startButtonIcon.classList.add('animate-spin'); } } else { if(startButtonText) startButtonText.textContent = 'Start Boosting'; if(startButtonIcon) { startButtonIcon.setAttribute('data-lucide', 'play'); startButtonIcon.classList.remove('animate-spin'); } } if(lucide) lucide.createIcons(); }
+
+    showRegisterButton.addEventListener('click', () => showAuthSection('register'));
+    showLoginButton.addEventListener('click', () => showAuthSection('login'));
+    cancelOtpButton.addEventListener('click', () => showAuthSection('register'));
+
+    loginButton.addEventListener('click', async () => { hideAuthMessage(loginError); const username = document.getElementById('loginUsername').value; const password = document.getElementById('loginPassword').value; if (!username || !password) { displayAuthError(loginError, 'Username and password required.'); return; } try { loginButton.disabled = true; loginButton.textContent = 'Logging in...'; const response = await fetch(`${API_BASE}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }), credentials: 'include' }); const data = await response.json(); if (!response.ok) { throw new Error(data.message || `HTTP error! status: ${response.status}`); } showAppUI(data); } catch (error) { displayAuthError(loginError, error.message); } finally { loginButton.disabled = false; loginButton.textContent = 'Login'; } });
+    registrationFormElement.addEventListener('submit', async (event) => { event.preventDefault(); hideAuthMessage(registerError); hideAuthMessage(registerSuccess); const formData = new FormData(registrationFormElement); const password = formData.get('password'); const confirmPassword = formData.get('confirmPassword'); if (password !== confirmPassword) { displayAuthError(registerError, 'Passwords do not match.'); return; } if (password.length < 6) { displayAuthError(registerError, 'Password must be at least 6 characters.'); return; } try { registerButton.disabled = true; registerButton.textContent = 'Sending OTP...'; const response = await fetch(`${API_BASE}/register`, { method: 'POST', body: formData, credentials: 'include' }); const data = await response.json(); if (!response.ok) { throw new Error(data.message || `HTTP error! status: ${response.status}`); } if (data.requiresOtp) { currentOtpNumber = data.phoneNumber; otpPhoneNumberSpan.textContent = currentOtpNumber; showAuthSection('otp'); otpInput.focus(); } else { displayAuthSuccess(registerSuccess, data.message); showAuthSection('login');} } catch (error) { displayAuthError(registerError, error.message); } finally { registerButton.disabled = false; registerButton.textContent = 'Register'; } });
+    verifyOtpButton.addEventListener('click', async () => { hideAuthMessage(otpError); const otp = otpInput.value; if (!otp || !currentOtpNumber) { displayAuthError(otpError, 'OTP and phone number context are required.'); return; } if (!/^\d{6}$/.test(otp)) { displayAuthError(otpError, 'OTP must be 6 digits.'); return; } try { verifyOtpButton.disabled = true; verifyOtpButton.textContent = 'Verifying...'; const response = await fetch(`${API_BASE}/verify-otp`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phoneNumber: currentOtpNumber, otp: otp }), credentials: 'include' }); const data = await response.json(); if (!response.ok) { throw new Error(data.message || `HTTP error! status: ${response.status}`); } displayAuthSuccess(registerSuccess, data.message); registrationFormElement.reset(); fileNameSpan.textContent = 'No file chosen'; showAuthSection('login'); currentOtpNumber = null; } catch (error) { displayAuthError(otpError, error.message); } finally { verifyOtpButton.disabled = false; verifyOtpButton.textContent = 'Verify OTP'; } });
+    logoutButton.addEventListener('click', async () => { try { await fetch(`${API_BASE}/logout`, { method: 'POST', credentials: 'include' }); } catch (error) { console.error('Logout error:', error); } finally { showAuthUI(); } });
+    startButton.addEventListener('click', () => { const cookie = cookiesInput.value; const url = urlsInput.value; const amount = parseInt(amountsInput.value, 10); const interval = parseInt(intervalsInput.value, 10); const isPremium = userData ? userData.isPremium : false; if (!url || isNaN(amount) || amount < 1 || isNaN(interval) || interval < 1 || !cookie ) { showModal('Please fill all fields correctly. Appstate, URL, Amount, and Interval are required.', 'error'); return; } try { JSON.parse(cookie); } catch (e) { showModal('Appstate seems to be invalid JSON.', 'error'); return; } if (!isPremium && amount > FREE_PLAN_LIMIT) { showModal(`Free plan limit is ${FREE_PLAN_LIMIT} shares. Please upgrade or lower the amount.`, 'error'); return; } const payload = { url, amount, interval, cookie }; sendMessage('start_share', payload); currentStatus.textContent = 'Sending start request...'; progress.textContent = ''; });
+    stopButton.addEventListener('click', () => { sendMessage('stop_share', {}); currentStatus.textContent = 'Sending stop request...'; });
+
+    function setActiveSection(sectionName) {
+        const targetSectionId = `${sectionName}-section`;
+        const targetSection = document.getElementById(targetSectionId);
+
+        const currentContentSections = document.querySelectorAll('.content-section');
+
+        currentContentSections.forEach(section => section.classList.remove('active'));
+        if (targetSection) {
+             targetSection.classList.add('active');
+             userInfoDisplay.classList.toggle('hidden', !['home'].includes(sectionName));
+        } else {
+
+             document.getElementById('home-section').classList.add('active');
+             userInfoDisplay.classList.remove('hidden');
+             sectionName = 'home';
+        }
+
+        let activeIndex = 0;
+        const visibleNavItems = Array.from(bottomNav.querySelectorAll('.nav-item:not(.hidden)'));
+        visibleNavItems.forEach((navItem, index) => {
+            const itemSection = navItem.dataset.section;
+            if (itemSection === sectionName) {
+                 navItem.classList.remove('text-text-muted');
+                 navItem.classList.add('text-primary');
+                 activeIndex = index;
+            } else {
+                 navItem.classList.remove('text-primary');
+                 navItem.classList.add('text-text-muted');
+            }
+        });
+         if (navIndicator) {
+              const totalVisibleItems = visibleNavItems.length || 1;
+              navIndicator.style.width = `${100 / totalVisibleItems}%`;
+              navIndicator.style.transform = `translateX(${activeIndex * 100}%)`;
+         }
+
+        sideMenuItems.forEach((sideItem) => {
+             const itemSection = sideItem.dataset.section;
+             const iconElement = sideItem.querySelector('i[data-lucide]') || sideItem.querySelector('svg');
+             if (!sideItem.classList.contains('hidden')) {
+                  if (itemSection === sectionName) {
+                      sideItem.classList.add('text-text-main', 'bg-primary/10', 'font-medium');
+                      sideItem.classList.remove('text-text-muted');
+                      if (iconElement) iconElement.classList.add('text-primary');
+                  } else {
+                      sideItem.classList.remove('text-text-main', 'bg-primary/10', 'font-medium');
+                      sideItem.classList.add('text-text-muted');
+                      if (iconElement) iconElement.classList.remove('text-primary');
+                  }
+             }
+        });
+        clearUpdateMessage(usernameUpdateMessage);
+        clearUpdateMessage(passwordUpdateMessage);
+        clearUpdateMessage(pfpUpdateMessage);
+        clearUpdateMessage(subscriptionRequestMessage);
+        closeSideMenu();
+
+        if(targetSection) lucide.createIcons({ nodes: [targetSection] });
+    }
+
+    navItems.forEach((item) => { item.addEventListener('click', function(e) { e.preventDefault(); if(!item.classList.contains('hidden')) setActiveSection(this.dataset.section); }); });
+    sideMenuItems.forEach((item) => { item.addEventListener('click', function(e) { e.preventDefault(); if(!item.classList.contains('hidden')) setActiveSection(this.dataset.section); }); });
+
+    function openSideMenu() { menuOverlay.classList.remove('hidden'); requestAnimationFrame(() => { sideMenu.classList.add('open'); menuOverlay.classList.remove('opacity-0'); }); } function closeSideMenu() { sideMenu.classList.remove('open'); menuOverlay.classList.add('opacity-0'); setTimeout(() => { menuOverlay.classList.add('hidden'); }, 300); }
+    if(menuButton) menuButton.addEventListener('click', openSideMenu); if(closeMenuButton) closeMenuButton.addEventListener('click', closeSideMenu); if(menuOverlay) menuOverlay.addEventListener('click', closeSideMenu);
+    responseModal.addEventListener('click', (event) => { if (event.target === responseModal) { responseModal.style.display = 'none'; } });
+    if(registerPfpInput && fileNameSpan) { registerPfpInput.addEventListener('change', () => { fileNameSpan.textContent = registerPfpInput.files.length > 0 ? registerPfpInput.files[0].name : 'No file chosen'; }); }
+    if(newPfpInput && newPfpName) { newPfpInput.addEventListener('change', () => { newPfpName.textContent = newPfpInput.files.length > 0 ? newPfpInput.files[0].name : 'No file chosen'; }); }
+
+    changeUsernameForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearUpdateMessage(usernameUpdateMessage);
+        const newUsername = newUsernameInput.value.trim();
+        if (!newUsername || newUsername.length < 3) {
+            displayUpdateMessage(usernameUpdateMessage, 'Username must be at least 3 characters.', true);
+            return;
+        }
+        const button = document.getElementById('updateUsernameButton');
+        button.disabled = true; button.textContent = 'Updating...';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/user/update-username`, {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify({ newUsername }),
+                 credentials: 'include'
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                 throw new Error(data.message || 'Failed to update username.');
+            }
+            displayUpdateMessage(usernameUpdateMessage, data.message, false);
+            if(userData) userData.username = data.newUsername;
+            if(userDisplayName) userDisplayName.textContent = data.newUsername;
+            if(profileSectionUsername) profileSectionUsername.textContent = data.newUsername;
+            newUsernameInput.value = '';
+        } catch (error) {
+             displayUpdateMessage(usernameUpdateMessage, error.message, true);
+        } finally {
+             button.disabled = false; button.textContent = 'Update Username';
+        }
+    });
+
+    changePasswordForm.addEventListener('submit', async (e) => {
+         e.preventDefault();
+         clearUpdateMessage(passwordUpdateMessage);
+         const formData = new FormData(changePasswordForm);
+         const currentPassword = formData.get('currentPassword');
+         const newPassword = formData.get('newPassword');
+         const confirmPassword = formData.get('confirmPassword');
+
+         if (!currentPassword || !newPassword || !confirmPassword) {
+             displayUpdateMessage(passwordUpdateMessage, 'All fields are required.', true); return;
+         }
+         if (newPassword.length < 6) {
+             displayUpdateMessage(passwordUpdateMessage, 'New password must be at least 6 characters.', true); return;
+         }
+         if (newPassword !== confirmPassword) {
+             displayUpdateMessage(passwordUpdateMessage, 'New passwords do not match.', true); return;
+         }
+
+         const button = document.getElementById('updatePasswordButton');
+         button.disabled = true; button.textContent = 'Updating...';
+
+         try {
+            const response = await fetch(`${API_BASE}/api/user/update-password`, {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+                 credentials: 'include'
+            });
+             const data = await response.json();
+             if (!response.ok) {
+                 throw new Error(data.message || 'Failed to update password.');
+             }
+             displayUpdateMessage(passwordUpdateMessage, data.message, false);
+             changePasswordForm.reset();
+         } catch (error) {
+             displayUpdateMessage(passwordUpdateMessage, error.message, true);
+         } finally {
+             button.disabled = false; button.textContent = 'Update Password';
+         }
+    });
+
+     changePfpForm.addEventListener('submit', async (e) => {
+         e.preventDefault();
+         clearUpdateMessage(pfpUpdateMessage);
+         const fileInput = document.getElementById('newPfp');
+         if (!fileInput.files || fileInput.files.length === 0) {
+             displayUpdateMessage(pfpUpdateMessage, 'Please select a file.', true);
+             return;
+         }
+         const formData = new FormData();
+         formData.append('newPfp', fileInput.files[0]);
+
+         const button = document.getElementById('updatePfpButton');
+         button.disabled = true; button.textContent = 'Uploading...';
+
+         try {
+             const response = await fetch(`${API_BASE}/api/user/update-pfp`, {
+                 method: 'POST',
+                 body: formData,
+                 credentials: 'include'
+             });
+             const data = await response.json();
+              if (!response.ok) {
+                 throw new Error(data.message || 'Failed to upload picture.');
+             }
+             displayUpdateMessage(pfpUpdateMessage, data.message, false);
+             if(userData) userData.pfpPath = data.newPfpPath;
+             updateUserPfps(data.newPfpPath);
+             changePfpForm.reset();
+             newPfpName.textContent = 'No file chosen';
+         } catch (error) {
+             displayUpdateMessage(pfpUpdateMessage, error.message, true);
+         } finally {
+              button.disabled = false; button.textContent = 'Update Picture';
+         }
+     });
+
+     upgradeSection.addEventListener('click', async (e) => {
+         const button = e.target.closest('.request-button');
+          if (button) {
+              const planType = button.dataset.plan;
+              clearUpdateMessage(subscriptionRequestMessage);
+              button.disabled = true;
+
+              button.innerHTML = '<i data-lucide="loader-circle" class="w-4 h-4 animate-spin"></i> Requesting...';
+              lucide.createIcons({ nodes: [button] });
+
+
+              try {
+                  const response = await fetch(`${API_BASE}/api/user/request-subscription`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ planType }),
+                      credentials: 'include'
+                  });
+                   const data = await response.json();
+                   if (!response.ok) {
+                       throw new Error(data.message || 'Failed to submit request.');
+                   }
+                   displayUpdateMessage(subscriptionRequestMessage, data.message, false);
+
+
+              } catch (error) {
+                   displayUpdateMessage(subscriptionRequestMessage, error.message, true);
+                    button.disabled = false;
+                    button.innerHTML = '<i data-lucide="shopping-cart" class="w-4 h-4"></i> Request Plan';
+                    lucide.createIcons({ nodes: [button] });
+              }
+          }
+     });
+
+
+    document.addEventListener('DOMContentLoaded', () => { checkSession(); lucide.createIcons(); });
+</script>
+</body>
+</html>

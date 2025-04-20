@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Share Boost</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" href="https://i.imgur.com/zi15QL3.png" type="image/png">
+    <meta name="theme-color" content="#1a172d">
+
+<script>
+     tailwind.config = {
+         darkMode: 'class',
+         theme: {
+             extend: {
+                 fontFamily: {
+                     poppins: ['Poppins', 'sans-serif'],
+                 },
+                 colors: {
+                    primary: '#8B5CF6', 'primary-darker': '#7C3AED', 'text-main': '#E5E7EB', 'text-muted': '#9CA3AF', 'bg-container': '#1a172d', 'bg-card': 'rgba(43, 42, 62, 0.5)', 'border-color': 'rgba(139, 92, 246, 0.15)', 'input-bg': 'rgba(43, 42, 62, 0.5)', 'input-border': 'rgba(139, 92, 246, 0.3)', 'nav-bg': 'rgba(30, 26, 52, 0.85)', 'nav-border': 'rgba(139, 92, 246, 0.2)', 'success-bg': '#166534', 'success-text': '#dcfce7', 'error-bg': '#991b1b', 'error-text': '#fee2e2', 'info-bg': 'rgba(139, 92, 246, 0.1)', 'info-text': '#d8b4fe', 'plan-free': '#a1a1aa', 'plan-premium': '#fcd34d', 'tag-admin': '#22d3ee', 'approve-bg': '#16a34a', 'approve-bg-hover': '#15803d', 'reject-bg': '#dc2626', 'reject-bg-hover': '#b91c1c', 'table-header-bg': 'rgba(30, 26, 52, 0.6)', 'table-row-even-bg': 'rgba(43, 42, 62, 0.2)',
+                 },
+                 boxShadow: { 'primary-glow': '0 0 15px rgba(139, 92, 246, 0.3)', 'card': '0 5px 20px rgba(0, 0, 0, 0.2)', 'header': '0 2px 10px rgba(30, 26, 52, 0.2)', }
+             },
+         },
+     }
+ </script>
+
+<style>
+    html { scroll-behavior: smooth; } body { font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; background-color: theme('colors.bg-container'); color: theme('colors.text-main'); } ::-webkit-scrollbar { width: 5px; height: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: theme('colors.primary'); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: theme('colors.primary-darker'); } .hidden { display: none; } .plan-tag { font-weight: 600; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; display: inline-block; vertical-align: middle; line-height: 1.2; } .plan-tag.free { background-color: theme('colors.plan-free'); color: theme('colors.bg-container'); } .plan-tag.premium { background-color: theme('colors.plan-premium'); color: theme('colors.bg-container'); } .btn { padding: 0.375rem 0.75rem; border-radius: 0.375rem; cursor: pointer; border: none; color: white; margin-right: 0.375rem; font-size: 0.875rem; transition: background-color 0.2s ease-in-out; display: inline-flex; align-items: center; gap: 0.25rem;} .btn:disabled { opacity: 0.6; cursor: not-allowed; } .btn-toggle-premium.premium { background-color: theme('colors.plan-free'); color: theme('colors.bg-container'); } .btn-toggle-premium.premium:hover:not(:disabled) { background-color: #71717a; } .btn-toggle-premium.free { background-color: theme('colors.plan-premium'); color: theme('colors.bg-container'); } .btn-toggle-premium.free:hover:not(:disabled) { background-color: #f59e0b; } .btn-delete { background-color: theme('colors.error-bg'); color: theme('colors.error-text'); } .btn-delete:hover:not(:disabled) { background-color: #b91c1c; } .btn-approve { background-color: theme('colors.approve-bg'); color: white; } .btn-approve:hover:not(:disabled) { background-color: theme('colors.approve-bg-hover'); } .btn-reject { background-color: theme('colors.reject-bg'); color: white; } .btn-reject:hover:not(:disabled) { background-color: theme('colors.reject-bg-hover'); } #adminMessage { margin-top: 1rem; margin-bottom: 1rem; padding: 0.75rem 1rem; border-radius: 0.375rem; font-size: 0.875rem; border: 1px solid transparent; transition: opacity 0.3s ease-in-out;} #adminMessage.hidden { opacity: 0; } #adminMessage.success { background-color: theme('colors.success-bg'); color: theme('colors.success-text'); border-color: #34d399; opacity: 1; } #adminMessage.error { background-color: theme('colors.error-bg'); color: theme('colors.error-text'); border-color: #f87171; opacity: 1; } .tab-button { padding: 0.5rem 1rem; border: none; background: none; color: theme('colors.text-muted'); border-bottom: 2px solid transparent; cursor: pointer; transition: color 0.2s, border-color 0.2s; } .tab-button.active { color: theme('colors.primary'); border-bottom-color: theme('colors.primary'); font-weight: 500; } .tab-content { display: none; } .tab-content.active { display: block; margin-top: 1.5rem;} table { table-layout: fixed; width: 100%; } table th { background-color: theme('colors.table-header-bg'); } table td, table th { vertical-align: middle; padding: 0.75rem 1rem; } table tbody tr:nth-child(even) { background-color: theme('colors.table-row-even-bg'); } table tbody tr:hover { background-color: theme('colors.primary') !important; background-opacity: 0.1 !important; }
+</style>
+</head>
+<body class="min-h-screen bg-bg-container">
+
+    <header class="p-4 border-b bg-nav-bg border-nav-border sticky top-0 z-40 backdrop-blur-md shadow-header">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+               <img src="https://i.imgur.com/zi15QL3.png" alt="Logo" class="w-8 h-8 bg-primary p-1 rounded-lg">
+               <h1 class="text-xl font-semibold text-inherit">Admin Panel</h1>
+            </div>
+            <a href="/" title="Back to App" class="text-primary hover:text-primary-darker transition-colors p-1.5 bg-primary/10 rounded-lg">
+                 <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-5">
+
+         <div class="mb-6 border-b border-nav-border">
+            <nav class="flex space-x-4" aria-label="Tabs">
+              <button class="tab-button active" data-tab="users">User Management</button>
+              <button class="tab-button" data-tab="requests">Subscription Requests</button>
+            </nav>
+          </div>
+
+         <div id="adminMessage" class="hidden"></div>
+
+
+        <div id="users-tab" class="tab-content active">
+            <h2 class="text-2xl font-semibold text-text-main mb-5">User Management</h2>
+             <div class="overflow-x-auto bg-bg-card rounded-lg border border-border-color shadow-card">
+                 <table id="usersTable" class="w-full text-sm text-left">
+                     <thead class="text-xs text-text-muted uppercase">
+                         <tr>
+                             <th scope="col" class="px-4 py-3 w-1/5">Username</th>
+                             <th scope="col" class="px-4 py-3 w-1/6">Plan Status</th>
+                             <th scope="col" class="px-4 py-3 w-1/6">Expires At</th>
+                             <th scope="col" class="px-4 py-3 w-1/4">Registered At</th>
+                             <th scope="col" class="px-4 py-3 w-1/4">Actions</th>
+                         </tr>
+                     </thead>
+                     <tbody class="divide-y divide-border-color">
+                         <tr class="bg-bg-card"> <td colspan="5" class="px-6 py-4 text-center text-text-muted">Loading users...</td> </tr>
+                     </tbody>
+                 </table>
+             </div>
+        </div>
+
+         <div id="requests-tab" class="tab-content">
+             <h2 class="text-2xl font-semibold text-text-main mb-5">Pending Subscription Requests</h2>
+             <div class="overflow-x-auto bg-bg-card rounded-lg border border-border-color shadow-card">
+                 <table id="requestsTable" class="w-full text-sm text-left">
+                      <thead class="text-xs text-text-muted uppercase">
+                         <tr>
+                             <th scope="col" class="px-4 py-3 w-1/6">Request ID</th>
+                             <th scope="col" class="px-4 py-3 w-1/5">Username</th>
+                             <th scope="col" class="px-4 py-3 w-1/6">Plan</th>
+                             <th scope="col" class="px-4 py-3 w-1/6">Amount (₱)</th>
+                             <th scope="col" class="px-4 py-3 w-1/4">Requested At</th>
+                             <th scope="col" class="px-4 py-3 w-1/5">Actions</th>
+                         </tr>
+                     </thead>
+                     <tbody class="divide-y divide-border-color">
+                         <tr class="bg-bg-card"> <td colspan="6" class="px-6 py-4 text-center text-text-muted">Loading requests...</td> </tr>
+                     </tbody>
+                 </table>
+             </div>
+        </div>
+
+    </main>
+
+    <script>
+        const usersTableBody = document.querySelector('#usersTable tbody');
+        const requestsTableBody = document.querySelector('#requestsTable tbody');
+        const adminMessageDiv = document.getElementById('adminMessage');
+        const tabs = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        const planLabels = { '1_week': '1 Week', '3_weeks': '3 Weeks', '3_months': '3 Months', '1_year': '1 Year' };
+
+
+         function showAdminMessage(message, isError = false) {
+            adminMessageDiv.textContent = message;
+            adminMessageDiv.className = isError ? 'error' : 'success';
+            adminMessageDiv.classList.remove('hidden');
+            setTimeout(() => {
+                adminMessageDiv.className = 'hidden';
+            }, 5000);
+        }
+
+        async function fetchUsers() {
+             usersTableBody.innerHTML = `<tr class="bg-bg-card"><td colspan="5" class="px-6 py-4 text-center text-text-muted">Loading users...</td></tr>`;
+            try {
+                const response = await fetch('/admin/users', {credentials: 'include'});
+                if (response.status === 403) {
+                     usersTableBody.innerHTML = `<tr class="bg-bg-card"><td colspan="5" class="px-6 py-4 text-center text-error-text font-semibold">Access Denied. Log in as admin first.</td></tr>`;
+                     showAdminMessage('Access Denied. Log in as admin first.', true);
+                     return;
+                 }
+                const responseText = await response.text();
+                if (!response.ok) { throw new Error(`Failed to fetch users (${response.status}): ${responseText || response.statusText}`); }
+                try { const users = JSON.parse(responseText); renderUsers(users); }
+                catch (parseError) { throw new Error(`Failed to parse user data: ${parseError.message}. Response: ${responseText}`); }
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                usersTableBody.innerHTML = `<tr class="bg-bg-card"><td colspan="5" class="px-6 py-4 text-center text-error-text">Error: ${error.message}</td></tr>`;
+                 showAdminMessage(`Error loading users: ${error.message}`, true);
+            }
+        }
+
+         async function fetchRequests() {
+             requestsTableBody.innerHTML = `<tr class="bg-bg-card"><td colspan="6" class="px-6 py-4 text-center text-text-muted">Loading requests...</td></tr>`;
+             try {
+                 const response = await fetch('/admin/subscription-requests', {credentials: 'include'});
+                 if (response.status === 403) {
+                      requestsTableBody.innerHTML = `<tr class="bg-bg-card"><td colspan="6" class="px-6 py-4 text-center text-error-text font-semibold">Access Denied. Log in as admin first.</td></tr>`;
+                      return;
+                  }
+                 const responseText = await response.text();
+                 if (!response.ok) { throw new Error(`Failed to fetch requests (${response.status}): ${responseText || response.statusText}`); }
+                 try { const requests = JSON.parse(responseText); renderRequests(requests); }
+                 catch (parseError) { throw new Error(`Failed to parse request data: ${parseError.message}. Response: ${responseText}`); }
+             } catch (error) {
+                 console.error('Error fetching requests:', error);
+                 requestsTableBody.innerHTML = `<tr class="bg-bg-card"><td colspan="6" class="px-6 py-4 text-center text-error-text">Error: ${error.message}</td></tr>`;
+                  showAdminMessage(`Error loading requests: ${error.message}`, true);
+             }
+         }
+
+        function renderUsers(users) {
+            if (!users || users.length === 0) {
+                usersTableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-text-muted">No users found.</td></tr>';
+                return;
+            }
+            usersTableBody.innerHTML = '';
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.dataset.userId = user.userId;
+                const createdAt = new Date(user.createdAt).toLocaleString();
+                const isPremium = user.isPremium === 1;
+                const expiresAt = user.subscriptionExpiresAt ? new Date(user.subscriptionExpiresAt).toLocaleDateString() : 'N/A';
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-medium text-text-main whitespace-nowrap">${escapeHtml(user.username)}</td>
+                    <td class="px-4 py-3 premium-status"> <span class="plan-tag ${isPremium ? 'premium' : 'free'}"> ${isPremium ? 'Premium' : 'Free'} </span> </td>
+                    <td class="px-4 py-3 text-text-muted">${expiresAt}</td>
+                    <td class="px-4 py-3 text-text-muted">${createdAt}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">
+                        <button class="btn btn-toggle-premium ${isPremium ? 'premium' : 'free'}" data-userid="${user.userId}"> ${isPremium ? 'Make Free' : 'Make Premium'} </button>
+                        <button class="btn btn-delete" data-userid="${user.userId}" data-username="${escapeHtml(user.username)}">Delete</button>
+                    </td>`;
+                usersTableBody.appendChild(row);
+            });
+            attachUserActionListeners();
+        }
+
+         function renderRequests(requests) {
+             if (!requests || requests.length === 0) {
+                 requestsTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-text-muted">No pending requests.</td></tr>';
+                 return;
+             }
+             requestsTableBody.innerHTML = '';
+             requests.forEach(req => {
+                 const row = document.createElement('tr');
+                 row.dataset.requestId = req.requestId;
+                 const requestedAt = new Date(req.requestedAt).toLocaleString();
+                 const planLabel = planLabels[req.planType] || req.planType;
+                 row.innerHTML = `
+                     <td class="px-4 py-3 font-medium text-text-main">${req.requestId}</td>
+                     <td class="px-4 py-3 text-text-main">${escapeHtml(req.username)}</td>
+                     <td class="px-4 py-3 text-text-muted">${planLabel}</td>
+                      <td class="px-4 py-3 text-text-muted">${req.amountExpected}</td>
+                     <td class="px-4 py-3 text-text-muted">${requestedAt}</td>
+                     <td class="px-4 py-3 whitespace-nowrap">
+                         <button class="btn btn-approve" data-requestid="${req.requestId}"><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>Approve</button>
+                         <button class="btn btn-reject" data-requestid="${req.requestId}"><i data-lucide="x-circle" class="w-4 h-4 mr-1"></i>Reject</button>
+                     </td>`;
+                 requestsTableBody.appendChild(row);
+             });
+             attachRequestActionListeners();
+             lucide.createIcons();
+         }
+
+         function attachUserActionListeners() {
+            document.querySelectorAll('#usersTable .btn-toggle-premium').forEach(button => button.addEventListener('click', handleTogglePremium));
+            document.querySelectorAll('#usersTable .btn-delete').forEach(button => button.addEventListener('click', handleDeleteUser));
+          }
+          function attachRequestActionListeners() {
+            document.querySelectorAll('#requestsTable .btn-approve').forEach(button => button.addEventListener('click', handleApproveRequest));
+            document.querySelectorAll('#requestsTable .btn-reject').forEach(button => button.addEventListener('click', handleRejectRequest));
+          }
+
+
+        async function handleTogglePremium(event) {
+            const button = event.target.closest('button'); const userId = button.dataset.userid; const currentRow = button.closest('tr'); const currentStatusCell = currentRow.querySelector('.premium-status'); const currentStatusIsPremium = currentStatusCell.querySelector('.plan-tag.premium') !== null;
+            button.disabled = true; button.textContent = 'Updating...';
+            try {
+                const response = await fetch(`/admin/toggle-premium/${userId}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include' });
+                 const data = await response.json(); if (!response.ok) throw new Error(data.message || 'Failed to toggle status');
+                 showAdminMessage(data.message, false);
+                 fetchUsers();
+            } catch (error) {
+                 console.error('Error toggling premium:', error); showAdminMessage(`Error: ${error.message}`, true);
+                 button.textContent = currentStatusIsPremium ? 'Make Free' : 'Make Premium'; button.disabled = false;
+            }
+        }
+
+        async function handleDeleteUser(event) {
+            const button = event.target.closest('button'); const userId = button.dataset.userid; const username = button.dataset.username;
+             if (!confirm(`Are you sure you want to delete user "${username}"? This cannot be undone.`)) return;
+            button.disabled = true; button.textContent = 'Deleting...';
+            try {
+                 const response = await fetch(`/admin/delete-user/${userId}`, { method: 'DELETE', credentials: 'include' });
+                 const data = await response.json(); if (!response.ok) throw new Error(data.message || 'Failed to delete user');
+                 button.closest('tr').remove(); showAdminMessage(data.message, false);
+            } catch (error) {
+                 console.error('Error deleting user:', error); showAdminMessage(`Error: ${error.message}`, true);
+                 button.textContent = 'Delete'; button.disabled = false;
+            }
+        }
+
+         async function handleApproveRequest(event) {
+             const button = event.target.closest('button'); const requestId = button.dataset.requestid;
+             button.disabled = true; button.innerHTML = 'Approving...';
+             const rejectButton = button.parentElement.querySelector('.btn-reject');
+             if(rejectButton) rejectButton.disabled = true;
+
+             try {
+                 const response = await fetch(`/admin/approve-subscription/${requestId}`, { method: 'POST', credentials: 'include' });
+                 const data = await response.json(); if (!response.ok) throw new Error(data.message || 'Failed to approve request');
+                 button.closest('tr').remove();
+                 showAdminMessage(data.message, false);
+                 fetchUsers();
+             } catch (error) {
+                  console.error('Error approving request:', error); showAdminMessage(`Error: ${error.message}`, true);
+                  button.disabled = false; button.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> Approve'; lucide.createIcons();
+                  if(rejectButton) rejectButton.disabled = false;
+             }
+         }
+
+          async function handleRejectRequest(event) {
+              const button = event.target.closest('button'); const requestId = button.dataset.requestid;
+              button.disabled = true; button.innerHTML = 'Rejecting...';
+              const approveButton = button.parentElement.querySelector('.btn-approve');
+              if(approveButton) approveButton.disabled = true;
+
+               try {
+                 const response = await fetch(`/admin/reject-subscription/${requestId}`, { method: 'POST', credentials: 'include' });
+                 const data = await response.json(); if (!response.ok) throw new Error(data.message || 'Failed to reject request');
+                 button.closest('tr').remove();
+                 showAdminMessage(data.message, false);
+             } catch (error) {
+                  console.error('Error rejecting request:', error); showAdminMessage(`Error: ${error.message}`, true);
+                  button.disabled = false; button.innerHTML = '<i data-lucide="x-circle" class="w-4 h-4 mr-1"></i> Reject'; lucide.createIcons();
+                  if(approveButton) approveButton.disabled = false;
+             }
+         }
+
+        function escapeHtml(unsafe) { if (!unsafe) return ''; return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+
+         tabs.forEach(tab => {
+             tab.addEventListener('click', () => {
+                 const targetTab = tab.dataset.tab;
+
+                 tabs.forEach(t => t.classList.remove('active'));
+                 tab.classList.add('active');
+
+                 tabContents.forEach(content => {
+                     content.classList.toggle('active', content.id === `${targetTab}-tab`);
+                 });
+
+                 if (targetTab === 'users') { fetchUsers(); }
+                 else if (targetTab === 'requests') { fetchRequests(); }
+             });
+         });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchUsers();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

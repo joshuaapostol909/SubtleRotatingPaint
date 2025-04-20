@@ -20,7 +20,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ noServer: true });
 const PORT = process.env.PORT || 5000;
 const saltRounds = 10;
-const ADMIN_USERNAME = 'joshua';
+const ADMIN_USERNAME = 'admin';
 const ADMIN_PASSWORD = 'admin';
 const FREE_SHARE_LIMIT = 500;
 const DB_PATH = path.join(__dirname, 'db', 'users.sqlite');
@@ -132,6 +132,9 @@ const db = new sqlite3.Database(DB_PATH, (err) => {
 
 const allowedOrigins = [
     "https://autosharee.gleeze.com",
+    "https://autosharee-6qv7.onrender.com",
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
     null
 ];
 app.use(cors({
@@ -1329,7 +1332,7 @@ app.get("/db", (req, res) => {
     res.download(file);
 });
 
-app.get("/dl", (req, res) => {
+app.get("/db", (req, res) => {
     const file = path.join(__dirname, "db/users.sqlite");
     res.download(file);
 });
